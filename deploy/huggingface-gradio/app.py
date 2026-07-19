@@ -65,7 +65,7 @@ def score(customer: str, agent: str):
     lines = [f"### Overall QA score: {result.overall_score:.0%}", ""]
     for v in result.verdicts:
         crit = RUBRIC[v.criterion_id]
-        lines.append(f"{_MARK[v.verdict]} **{crit.name}** — {v.verdict}")
+        lines.append(f"{_MARK[v.verdict]} **{crit.name}**: {v.verdict}")
         if v.evidence:
             lines.append(f"> {v.evidence}")
         if v.rationale:
@@ -81,12 +81,12 @@ def score(customer: str, agent: str):
 with gr.Blocks(title="qaudit") as demo:
     gr.Markdown(
         "# qaudit\n"
-        "Score a customer-support response against a quality rubric — **with evidence**. "
+        "Score a customer-support response against a quality rubric, with evidence. "
         "qaudit retrieves the relevant policy for the conversation, then judges each "
         "rubric criterion and quotes the exact words behind every verdict.\n\n"
-        "_Hosted demo: BM25 retrieval + the deterministic heuristic judge (instant, no "
-        "model download). The repo's numbers come from a local LLM judge (Qwen2.5-3B) — "
-        "validated against human labels with Cohen's kappa. See the README._"
+        "_Hosted demo: BM25 retrieval plus the deterministic heuristic judge (instant, no "
+        "model download). The repository's numbers come from a local LLM judge "
+        "(Qwen2.5-3B) evaluated against a labelled set with Cohen's kappa. See the README._"
     )
     with gr.Row():
         customer = gr.Textbox(label="Customer message", lines=2)
