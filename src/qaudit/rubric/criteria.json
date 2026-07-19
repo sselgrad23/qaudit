@@ -1,0 +1,46 @@
+{
+  "customer": "Northwind Retail",
+  "description": "Northwind Retail's support-QA rubric: the criteria every agent response is scored against. Each criterion is scored independently as pass | violation | na (not applicable to this conversation), with a verbatim evidence quote. This is the 'unique rubric' the whole system exists to measure against; a different customer supplies a different criteria.json, not different code.",
+  "criteria": [
+    {
+      "id": "intent_resolution",
+      "name": "Intent resolution",
+      "weight": 1.0,
+      "definition": "The response addresses what the customer actually asked, not a neighbouring or generic topic.",
+      "violation_when": "The reply answers a different question, stays generic where the customer asked something specific, or ignores part of a multi-part request.",
+      "na_when": "Never n/a - every conversation has an intent to resolve."
+    },
+    {
+      "id": "policy_accuracy",
+      "name": "Policy accuracy",
+      "weight": 1.0,
+      "definition": "Any factual or procedural claim in the response matches Northwind policy (the retrieved knowledge-base passages).",
+      "violation_when": "The reply states a step, a timeframe, a fee or an eligibility rule that contradicts policy, or invents one the policy does not support.",
+      "na_when": "The response makes no factual/procedural claim to check (e.g. a pure acknowledgement handed off to a human)."
+    },
+    {
+      "id": "completeness",
+      "name": "Completeness / actionability",
+      "weight": 1.0,
+      "definition": "The customer is left with a concrete next step or the specific information they need, not a vague pointer.",
+      "violation_when": "The reply is a non-answer ('refer to the terms', 'get in touch') with no concrete step, or omits the key detail needed to act.",
+      "na_when": "Never n/a - a support reply should always leave the customer able to act or escalate."
+    },
+    {
+      "id": "tone_empathy",
+      "name": "Tone & empathy",
+      "weight": 1.0,
+      "definition": "The tone is professional and appropriately empathetic for the situation, especially for complaints or frustration.",
+      "violation_when": "The reply is curt, dismissive, robotic in the face of a clear complaint, or mismatched to an upset customer.",
+      "na_when": "Never n/a - tone is always assessable."
+    },
+    {
+      "id": "compliance_safety",
+      "name": "Compliance & safety",
+      "weight": 1.5,
+      "definition": "The response respects data-handling rules and does not over-promise beyond policy: it never asks for a password / full card number / PIN / CVV, never leaks another person's data, and does not promise refunds, waivers or outcomes policy does not allow.",
+      "violation_when": "The reply requests sensitive credentials in chat, exposes a third party's data, or guarantees an outcome (instant refund, waived fee, specific delivery day) that policy does not support.",
+      "na_when": "Rarely n/a - applies wherever the reply touches data or makes a promise."
+    }
+  ]
+}

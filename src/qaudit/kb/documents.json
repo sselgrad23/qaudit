@@ -1,0 +1,238 @@
+{
+  "customer": "Northwind Retail",
+  "description": "Policy / help-centre knowledge base for a fictional e-commerce retailer, 'Northwind Retail'. This is the retrieval corpus: given a support conversation, the assistant retrieves the passages that state the correct handling policy, and the judge uses them as evidence for the policy-accuracy and completeness criteria. Passages are written in policy language and deliberately avoid echoing customer phrasing (a customer says 'penalty for breaking the contract'; the policy says 'early-cancellation fee'), so lexical (BM25) and dense retrieval genuinely differ. `intents` lists the Bitext intents each passage is the authoritative source for; it seeds the retrieval gold set but is not a substitute for it.",
+  "passages": [
+    {
+      "id": "pol-order-cancel-window",
+      "doc": "Orders",
+      "title": "Cancelling an order",
+      "category": "ORDER",
+      "intents": ["cancel_order"],
+      "text": "An order can be cancelled by the customer at no charge while its status is 'Processing'. Cancellation is done from Your Account > Orders > the order > Cancel order. Once an order has moved to 'Shipped' it can no longer be cancelled and must be handled as a return once it arrives."
+    },
+    {
+      "id": "pol-order-cancel-refund",
+      "doc": "Orders",
+      "title": "Refunds on cancelled orders",
+      "category": "ORDER",
+      "intents": ["cancel_order", "get_refund"],
+      "text": "When an order is cancelled before shipment, the full amount including delivery is released back to the original payment method within 5 business days. No cancellation fee applies to standard retail orders; fees only apply to subscription contracts (see Subscriptions)."
+    },
+    {
+      "id": "pol-order-edit",
+      "doc": "Orders",
+      "title": "Editing items in an order",
+      "category": "ORDER",
+      "intents": ["change_order"],
+      "text": "Items, sizes and quantities in an order can be modified from Your Account > Orders > the order > Edit, but only while the order is 'Processing'. To add a product that was left out, edit the order before it ships; if it has already shipped, place a new order for the missing item rather than editing the old one."
+    },
+    {
+      "id": "pol-order-place",
+      "doc": "Orders",
+      "title": "Placing an order",
+      "category": "ORDER",
+      "intents": ["place_order"],
+      "text": "To place an order, add items to the basket, open the basket and select Checkout, confirm the delivery address and a payment method, then Place order. A confirmation email with an order number is sent immediately. An account is not required to check out as a guest, but an account lets the customer track and change the order later."
+    },
+    {
+      "id": "pol-cancel-fee-subscription",
+      "doc": "Cancellations & fees",
+      "title": "Early-termination charges",
+      "category": "CANCEL",
+      "intents": ["check_cancellation_fee"],
+      "text": "Fixed-term subscription contracts carry an early-termination charge equal to 20% of the remaining contract value if ended before the minimum term. Standard retail orders never carry a cancellation charge. The exact figure for a given contract is shown at Your Account > Subscriptions > Manage > Cancel before the customer confirms, so agents should point customers to that screen rather than quote a number from memory."
+    },
+    {
+      "id": "pol-cancel-fee-where",
+      "doc": "Cancellations & fees",
+      "title": "Confirming a fee before cancelling",
+      "category": "CANCEL",
+      "intents": ["check_cancellation_fee", "cancel_order"],
+      "text": "Any charge that would apply to a cancellation is always displayed for confirmation before the cancellation is finalised, so a customer is never charged an amount they have not seen. Agents must not ask a customer to send full account or card details in chat to 'check a fee'; the figure is visible in the account without sharing sensitive data."
+    },
+    {
+      "id": "pol-refund-policy",
+      "doc": "Refunds",
+      "title": "Refund eligibility and window",
+      "category": "REFUND",
+      "intents": ["check_refund_policy", "get_refund"],
+      "text": "Unused items in original condition can be returned within 30 days of delivery for a full refund. Opened items are eligible within 14 days unless faulty, in which case the statutory right to a refund applies regardless of the window. Refunds are issued to the original payment method; store credit is offered only if the customer prefers it."
+    },
+    {
+      "id": "pol-refund-timing",
+      "doc": "Refunds",
+      "title": "How long a refund takes",
+      "category": "REFUND",
+      "intents": ["get_refund", "track_refund"],
+      "text": "Once a return is received and inspected, the refund is approved within 2 business days and appears on the customer's statement 3 to 5 business days after that, depending on their bank. The customer does not need to do anything during this period; agents should give this timeframe rather than promising the money 'immediately'."
+    },
+    {
+      "id": "pol-refund-track",
+      "doc": "Refunds",
+      "title": "Tracking a refund",
+      "category": "REFUND",
+      "intents": ["track_refund"],
+      "text": "The status of a refund is shown at Your Account > Orders > the order > Refund status, which reads Requested, Approved or Completed. If it still reads Requested more than 10 business days after the return was delivered, the customer should be escalated to the payments team."
+    },
+    {
+      "id": "pol-invoice-find",
+      "doc": "Invoices & billing",
+      "title": "Finding an invoice",
+      "category": "INVOICE",
+      "intents": ["check_invoice", "get_invoice"],
+      "text": "Invoices are available at Your Account > Orders > the order > Download invoice as a PDF, and a copy is emailed when the order is dispatched. Invoices going back three years are retained. A customer cannot be shown or sent an invoice belonging to another named person without that account holder's verified consent."
+    },
+    {
+      "id": "pol-invoice-request",
+      "doc": "Invoices & billing",
+      "title": "Requesting a copy invoice",
+      "category": "INVOICE",
+      "intents": ["get_invoice"],
+      "text": "If a customer cannot locate an invoice, an agent can resend the PDF to the email address on the account. Invoices are only ever sent to the account's own registered email, never to a third-party address supplied in chat."
+    },
+    {
+      "id": "pol-payment-methods",
+      "doc": "Payments",
+      "title": "Accepted payment methods",
+      "category": "PAYMENT",
+      "intents": ["check_payment_methods"],
+      "text": "Northwind accepts Visa, Mastercard and American Express, plus PayPal, Apple Pay and Google Pay. Accepted methods are listed at Checkout and under Help > Payments. Gift cards can be combined with one other payment method. Bank transfer is not supported for retail orders."
+    },
+    {
+      "id": "pol-payment-issue",
+      "doc": "Payments",
+      "title": "Declined or failed payments",
+      "category": "PAYMENT",
+      "intents": ["payment_issue"],
+      "text": "A payment can fail because of an expired card, insufficient funds, or a bank security check. The customer should confirm the card details and try again, or use a different method; the order is not placed until payment succeeds. Agents must never ask the customer to share a full card number, PIN or CVV in chat - a failed payment is retried by the customer directly at Checkout."
+    },
+    {
+      "id": "pol-shipping-address-change",
+      "doc": "Delivery & addresses",
+      "title": "Changing a delivery address",
+      "category": "SHIPPING",
+      "intents": ["change_shipping_address", "set_up_shipping_address"],
+      "text": "A delivery address can be edited at Your Account > Addresses, and an order's address can be changed from the order page while it is still 'Processing'. Once an order is 'Shipped' the destination is fixed with the carrier and can no longer be altered by the agent or the customer."
+    },
+    {
+      "id": "pol-shipping-address-add",
+      "doc": "Delivery & addresses",
+      "title": "Adding a new address",
+      "category": "SHIPPING",
+      "intents": ["set_up_shipping_address", "change_shipping_address"],
+      "text": "New delivery addresses are added under Your Account > Addresses > Add address, and any saved address can be set as the default for future orders. The default address is used automatically at checkout unless the customer selects another one."
+    },
+    {
+      "id": "pol-delivery-options",
+      "doc": "Delivery & addresses",
+      "title": "Delivery options and cost",
+      "category": "DELIVERY",
+      "intents": ["delivery_options"],
+      "text": "Standard delivery (3-5 business days) is free over the order threshold and a flat fee below it; express delivery (1-2 business days) and next-day (order before 2pm) carry a fixed surcharge shown at checkout. Delivery options are selected at checkout before payment."
+    },
+    {
+      "id": "pol-delivery-period",
+      "doc": "Delivery & addresses",
+      "title": "Estimated delivery time",
+      "category": "DELIVERY",
+      "intents": ["delivery_period", "track_order"],
+      "text": "The estimated arrival date is shown at checkout and on the order confirmation. Dispatched orders include a tracking link; standard orders arrive within 3-5 business days of dispatch, not of ordering. Agents should quote the tracked estimate rather than guaranteeing a specific day the courier has not committed to."
+    },
+    {
+      "id": "pol-track-order",
+      "doc": "Delivery & addresses",
+      "title": "Tracking an order",
+      "category": "DELIVERY",
+      "intents": ["track_order"],
+      "text": "An order's progress is shown at Your Account > Orders > the order > Track, and the dispatch email contains a carrier tracking link. If tracking has not updated for more than 3 business days after dispatch, the order should be escalated to the delivery team to open a query with the carrier."
+    },
+    {
+      "id": "pol-account-create",
+      "doc": "Accounts",
+      "title": "Creating an account",
+      "category": "ACCOUNT",
+      "intents": ["create_account", "registration_problems"],
+      "text": "An account is created at Sign in > Create account using an email address and a password of at least ten characters. A verification email confirms the address; if it does not arrive the customer should check spam and use Resend verification before contacting support."
+    },
+    {
+      "id": "pol-account-register-problem",
+      "doc": "Accounts",
+      "title": "Problems registering",
+      "category": "ACCOUNT",
+      "intents": ["registration_problems", "create_account"],
+      "text": "The most common registration failures are an email that is already registered (the customer should sign in or reset the password instead) and a password that is too short. If verification repeatedly fails, an agent can trigger a manual verification once the account email has been confirmed as belonging to the customer."
+    },
+    {
+      "id": "pol-account-password",
+      "doc": "Accounts",
+      "title": "Resetting a password",
+      "category": "ACCOUNT",
+      "intents": ["recover_password"],
+      "text": "A forgotten password is reset from Sign in > Forgot password, which emails a time-limited reset link to the registered address. Agents cannot see, set or read out a customer's password and must never ask the customer to reveal their current one; the self-service reset link is the only supported route."
+    },
+    {
+      "id": "pol-account-edit",
+      "doc": "Accounts",
+      "title": "Editing account details",
+      "category": "ACCOUNT",
+      "intents": ["edit_account", "switch_account"],
+      "text": "Name, email, password and communication preferences are edited under Your Account > Profile. Changing the account email triggers a re-verification to the new address. A customer can be signed into only one account at a time; to switch account they sign out and sign back in with the other credentials."
+    },
+    {
+      "id": "pol-account-delete",
+      "doc": "Accounts",
+      "title": "Deleting an account",
+      "category": "ACCOUNT",
+      "intents": ["delete_account"],
+      "text": "Account deletion is requested from Your Account > Profile > Close account and is permanent: order history and saved details are removed after a 30-day grace period during which the request can be reversed by signing back in. Any open orders or pending refunds must be resolved before an account can be closed."
+    },
+    {
+      "id": "pol-contact-human",
+      "doc": "Contacting support",
+      "title": "Reaching a human agent",
+      "category": "CONTACT",
+      "intents": ["contact_human_agent", "contact_customer_service"],
+      "text": "A live agent is reached from Help > Contact us > Chat with an agent during opening hours, or by requesting a callback. The chat assistant hands over to a human whenever the customer asks. Agents should offer this hand-off rather than leaving a customer stuck when a request is outside self-service."
+    },
+    {
+      "id": "pol-contact-channels",
+      "doc": "Contacting support",
+      "title": "Support channels and hours",
+      "category": "CONTACT",
+      "intents": ["contact_customer_service"],
+      "text": "Support is available by chat and email seven days a week, 8am-8pm, and by phone on weekdays. Email replies are answered within one business day. The current channels and hours are listed at Help > Contact us; agents should give a concrete channel rather than a vague 'get in touch'."
+    },
+    {
+      "id": "pol-complaint-handling",
+      "doc": "Feedback & complaints",
+      "title": "Handling a complaint",
+      "category": "FEEDBACK",
+      "intents": ["complaint"],
+      "text": "A complaint should be acknowledged with a genuine apology, the specific problem restated so the customer feels heard, and a concrete next step or resolution offered. Unresolved or serious complaints are escalated to a supervisor and logged. Dismissive or purely scripted responses to a complaint are a quality failure even when factually correct."
+    },
+    {
+      "id": "pol-review-feedback",
+      "doc": "Feedback & complaints",
+      "title": "Leaving a review or feedback",
+      "category": "FEEDBACK",
+      "intents": ["review"],
+      "text": "Customers can leave a product review from the product page or the order, and general feedback via Help > Give feedback. Reviews for a purchased product are verified. Agents should thank the customer and point them to the right form rather than collecting the review text themselves."
+    },
+    {
+      "id": "pol-newsletter",
+      "doc": "Subscriptions & email",
+      "title": "Newsletter subscription",
+      "category": "SUBSCRIPTION",
+      "intents": ["newsletter_subscription"],
+      "text": "The marketing newsletter is opted into and out of at Your Account > Communication preferences, and every newsletter email has an unsubscribe link. Changing the newsletter preference does not affect transactional emails such as order confirmations and dispatch notices, which are always sent."
+    },
+    {
+      "id": "pol-data-minimisation",
+      "doc": "Handling customer data",
+      "title": "What agents must never ask for",
+      "category": "ACCOUNT",
+      "intents": ["payment_issue", "check_cancellation_fee", "recover_password", "check_invoice"],
+      "text": "Agents never ask a customer to reveal a password, PIN, full card number or CVV, and never send account documents to an address other than the one on file. Identity is confirmed through the signed-in session or an emailed link, not by collecting sensitive details in the chat transcript. Requesting such details is a compliance failure regardless of intent."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+# Local deployment of the QA-scoring API.
+#
+# The service defaults to the BM25 retriever + heuristic judge, so it runs on CPU
+# with no model download - the same configuration CI builds. To run the dense
+# retriever + local LLM judge, run on a GPU host with the [dense,llm] extras and set
+# QAUDIT_RETRIEVER=dense and QAUDIT_JUDGE_BACKEND=transformers.
+services:
+  api:
+    build: .
+    image: qaudit-api
+    ports:
+      - "8000:8000"
+    environment:
+      QAUDIT_RETRIEVER: "bm25"
+      QAUDIT_JUDGE_BACKEND: "heuristic"
+      # To trace the judge to LangSmith (free Developer tier, no card = cannot bill):
+      # LANGCHAIN_API_KEY: "${LANGCHAIN_API_KEY}"
+      # LANGCHAIN_TRACING_V2: "true"
+      # LANGCHAIN_PROJECT: "qaudit"
+    restart: unless-stopped

@@ -1,0 +1,14 @@
+.venv/
+.git/
+.github/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+**/__pycache__/
+reports/
+models/
+data/*.jsonl
+*.local.md
+docs/
+deploy/
+tests/
