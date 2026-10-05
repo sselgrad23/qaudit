@@ -128,7 +128,7 @@ src/qaudit/
   eval/labels/         the gold sets + LABELLING.md (the written labelling rubric)
   api/                 FastAPI service (/score, /retrieve)
 tests/                 pytest suite (BM25 + heuristic, no GPU/network)
-deploy/huggingface-gradio/   free Gradio Space (live demo)
+deploy/huggingface-gradio/   Gradio Space demo (not currently hosted)
 ```
 
 ## Gold sets
@@ -141,7 +141,7 @@ Conversations come from the Bitext customer-support dataset ([`bitext/Bitext-cus
 
 ## Deploy
 
-The demo is a free Hugging Face Gradio Space (heuristic judge plus BM25, so it is instant with no model download); source in `deploy/huggingface-gradio/`. The `Dockerfile` builds the same CPU setup for any container platform, and CI builds the image on every push.
+The demo is packaged as a Hugging Face Gradio Space (heuristic judge plus BM25, so it is instant with no model download) and is not currently hosted; source in `deploy/huggingface-gradio/`. The `Dockerfile` builds the same CPU setup for any container platform, and CI builds the image on every push.
 
 ## License
 
