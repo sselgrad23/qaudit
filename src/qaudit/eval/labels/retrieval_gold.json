@@ -1,7 +1,7 @@
 {
   "task": "Given a support conversation (the customer's message), retrieve the Northwind policy passages a QA reviewer would need to judge whether the agent handled it correctly.",
   "relevance_definition": "A passage is RELEVANT if it states the policy that governs the customer's request (the rule, step, timeframe, fee or data-handling constraint an auditor would check the agent against). Mark a passage relevant even if its wording differs from the customer's. Passages about a neighbouring topic that an auditor would not cite are NOT relevant.",
-  "labelling_status": "DRAFT - seeded from passage intents + hand overrides. Review 'reviewed': false rows.",
+  "labelling_status": "REVIEWED - all rows hand-reviewed against LABELLING.md (strict auditor-would-cite test). conv-0038 has no relevant passage (KB gap) and is excluded from scoring.",
   "n_queries": 40,
   "queries": [
     {
@@ -10,11 +10,10 @@
       "query": "help canceling purchase {{Order Number}}",
       "relevant_passages": [
         "pol-order-cancel-window",
-        "pol-order-cancel-refund",
-        "pol-cancel-fee-where"
+        "pol-order-cancel-refund"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Removed fee-where: subscription-fee passage; cancel-refund already states no fee on retail orders."
     },
     {
       "conversation_id": "conv-0002",
@@ -22,11 +21,10 @@
       "query": "iwant assistance canceling order {{Order Number}}",
       "relevant_passages": [
         "pol-order-cancel-window",
-        "pol-order-cancel-refund",
-        "pol-cancel-fee-where"
+        "pol-order-cancel-refund"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Removed fee-where: subscription-fee passage; cancel-refund already states no fee on retail orders."
     },
     {
       "conversation_id": "conv-0003",
@@ -35,7 +33,7 @@
       "relevant_passages": [
         "pol-order-edit"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -45,7 +43,7 @@
       "relevant_passages": [
         "pol-order-edit"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -53,22 +51,20 @@
       "intent": "change_shipping_address",
       "query": "I don't know how I can correct the address",
       "relevant_passages": [
-        "pol-shipping-address-change",
-        "pol-shipping-address-add"
+        "pol-shipping-address-change"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Correcting an address is not adding one."
     },
     {
       "conversation_id": "conv-0006",
       "intent": "change_shipping_address",
       "query": "can utell me about a shipping addres modification",
       "relevant_passages": [
-        "pol-shipping-address-change",
-        "pol-shipping-address-add"
+        "pol-shipping-address-change"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Modifying an address is not adding one."
     },
     {
       "conversation_id": "conv-0007",
@@ -76,11 +72,10 @@
       "query": "what are the penalties for breaking the contract?",
       "relevant_passages": [
         "pol-cancel-fee-subscription",
-        "pol-cancel-fee-where",
-        "pol-data-minimisation"
+        "pol-cancel-fee-where"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Agent asked for nothing sensitive; data-minimisation not cited."
     },
     {
       "conversation_id": "conv-0008",
@@ -91,8 +86,8 @@
         "pol-cancel-fee-where",
         "pol-data-minimisation"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Kept data-minimisation: agent asked for account details in chat (guide's own example)."
     },
     {
       "conversation_id": "conv-0009",
@@ -102,8 +97,8 @@
         "pol-invoice-find",
         "pol-invoice-request"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Kept invoice-request as the can't-locate fallback."
     },
     {
       "conversation_id": "conv-0010",
@@ -114,7 +109,7 @@
         "pol-invoice-request",
         "pol-data-minimisation"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": "Third-party invoice request; pol-data-minimisation added (consent needed)."
     },
     {
@@ -124,7 +119,7 @@
       "relevant_passages": [
         "pol-payment-methods"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -134,7 +129,7 @@
       "relevant_passages": [
         "pol-payment-methods"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -142,88 +137,80 @@
       "intent": "check_refund_policy",
       "query": "I need help seeing in which cases can I ask for a reufnd",
       "relevant_passages": [
-        "pol-refund-policy",
-        "pol-refund-timing"
+        "pol-refund-policy"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Asks when a refund is allowed (eligibility), not how long it takes."
     },
     {
       "conversation_id": "conv-0014",
       "intent": "check_refund_policy",
       "query": "I want to check your reimbursement policy, how do I do it?",
       "relevant_passages": [
-        "pol-refund-policy",
-        "pol-refund-timing"
+        "pol-refund-policy"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Asks for the refund policy (eligibility), not how long it takes."
     },
     {
       "conversation_id": "conv-0015",
       "intent": "complaint",
       "query": "I try to file a complaint against your organization",
       "relevant_passages": [
-        "pol-complaint-handling",
-        "pol-contact-human"
+        "pol-complaint-handling"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "complaint-handling already covers escalation."
     },
     {
       "conversation_id": "conv-0016",
       "intent": "complaint",
       "query": "would it be possible to file a damn customer reclamation?",
       "relevant_passages": [
-        "pol-complaint-handling",
-        "pol-contact-human"
+        "pol-complaint-handling"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "complaint-handling already covers escalation."
     },
     {
       "conversation_id": "conv-0017",
       "intent": "contact_customer_service",
       "query": "help me seeing what hours I can contact customer assistance",
       "relevant_passages": [
-        "pol-contact-channels",
-        "pol-contact-human"
+        "pol-contact-channels"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Hours are only in contact-channels."
     },
     {
       "conversation_id": "conv-0018",
       "intent": "contact_customer_service",
       "query": "check what hours I can reach customer support",
       "relevant_passages": [
-        "pol-contact-channels",
-        "pol-contact-human"
+        "pol-contact-channels"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Hours are only in contact-channels."
     },
     {
       "conversation_id": "conv-0019",
       "intent": "contact_human_agent",
       "query": "I would like to speak to a person",
       "relevant_passages": [
-        "pol-contact-human",
-        "pol-contact-channels"
+        "pol-contact-human"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Hand-off rule is in contact-human."
     },
     {
       "conversation_id": "conv-0020",
       "intent": "contact_human_agent",
       "query": "I need assistance speaking to a human agent",
       "relevant_passages": [
-        "pol-contact-human",
-        "pol-contact-channels"
+        "pol-contact-human"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Hand-off rule is in contact-human."
     },
     {
       "conversation_id": "conv-0021",
@@ -233,7 +220,7 @@
         "pol-account-create",
         "pol-account-register-problem"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -241,11 +228,10 @@
       "intent": "create_account",
       "query": "I need a different bloody {{Account Type}} account, can you create it?",
       "relevant_passages": [
-        "pol-account-create",
-        "pol-account-register-problem"
+        "pol-account-create"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Not reporting a registration failure."
     },
     {
       "conversation_id": "conv-0023",
@@ -254,7 +240,7 @@
       "relevant_passages": [
         "pol-account-delete"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -264,7 +250,7 @@
       "relevant_passages": [
         "pol-account-delete"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -274,7 +260,7 @@
       "relevant_passages": [
         "pol-delivery-options"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -284,7 +270,7 @@
       "relevant_passages": [
         "pol-delivery-options"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -295,7 +281,7 @@
         "pol-delivery-period",
         "pol-track-order"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -305,7 +291,7 @@
       "relevant_passages": [
         "pol-account-edit"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -316,8 +302,8 @@
         "pol-invoice-find",
         "pol-invoice-request"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Kept invoice-request as the can't-locate fallback."
     },
     {
       "conversation_id": "conv-0030",
@@ -325,11 +311,10 @@
       "query": "help me obtain a reimbursement",
       "relevant_passages": [
         "pol-refund-policy",
-        "pol-refund-timing",
-        "pol-order-cancel-refund"
+        "pol-refund-timing"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "No cancellation involved."
     },
     {
       "conversation_id": "conv-0031",
@@ -338,7 +323,7 @@
       "relevant_passages": [
         "pol-newsletter"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -346,11 +331,10 @@
       "intent": "payment_issue",
       "query": "can you help me to notify of issues with online payment?",
       "relevant_passages": [
-        "pol-payment-issue",
-        "pol-data-minimisation"
+        "pol-payment-issue"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "payment-issue already contains the never-ask-card rule; agent asked for nothing."
     },
     {
       "conversation_id": "conv-0033",
@@ -359,7 +343,7 @@
       "relevant_passages": [
         "pol-order-place"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -370,8 +354,8 @@
         "pol-account-password",
         "pol-data-minimisation"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Kept data-minimisation: only passage mentioning PINs."
     },
     {
       "conversation_id": "conv-0035",
@@ -381,7 +365,7 @@
         "pol-account-register-problem",
         "pol-account-create"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -391,7 +375,7 @@
       "relevant_passages": [
         "pol-review-feedback"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -399,21 +383,18 @@
       "intent": "set_up_shipping_address",
       "query": "there are problems setting another shipping address up",
       "relevant_passages": [
-        "pol-shipping-address-add",
-        "pol-shipping-address-change"
+        "pol-shipping-address-add"
       ],
-      "reviewed": false,
-      "note": ""
+      "reviewed": true,
+      "note": "Setting up another address is adding, not changing."
     },
     {
       "conversation_id": "conv-0038",
       "intent": "switch_account",
       "query": "can ya help me to change to the gold account",
-      "relevant_passages": [
-        "pol-account-edit"
-      ],
-      "reviewed": false,
-      "note": ""
+      "relevant_passages": [],
+      "reviewed": true,
+      "note": "KB gap: no passage covers account tiers/upgrades. account-edit's 'switch account' means a different login. Left empty, so excluded from retrieval metrics."
     },
     {
       "conversation_id": "conv-0039",
@@ -423,7 +404,7 @@
         "pol-track-order",
         "pol-delivery-period"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     },
     {
@@ -434,7 +415,7 @@
         "pol-refund-track",
         "pol-refund-timing"
       ],
-      "reviewed": false,
+      "reviewed": true,
       "note": ""
     }
   ]

@@ -19,34 +19,36 @@ The retriever pulls the policy passages an auditor would need out of the custome
 
 ## Results
 
-All figures regenerate with `make eval`. The judge numbers are measured against draft labels (see [Gold sets](#gold-sets)).
+All figures regenerate with `make eval` and are measured against hand-reviewed gold labels (see [Gold sets](#gold-sets)).
 
-**Retrieval**, BM25 vs dense, against the retrieval gold set (40 queries):
+**Retrieval**, BM25 vs dense, against the retrieval gold set (39 scored queries):
 
 | Retriever | MRR | Hit@1 | Hit@3 | Hit@5 | Recall@5 |
 |---|---|---|---|---|---|
-| BM25 | 0.459 | 0.300 | 0.575 | 0.725 | 0.554 |
-| **dense (MiniLM)** | **0.829** | **0.775** | **0.875** | **0.950** | **0.787** |
+| BM25 | 0.438 | 0.282 | 0.564 | 0.692 | 0.603 |
+| **dense (MiniLM)** | **0.824** | **0.769** | **0.872** | **0.949** | **0.880** |
 
-Dense roughly doubles MRR (0.46 to 0.83). The policy is written in policy language rather than the customer's wording, so keyword search misses it. Dense is the default; BM25 remains as the free, download-free baseline used in CI.
+Dense roughly doubles MRR (0.44 to 0.82). The policy is written in policy language rather than the customer's wording, so keyword search misses it. Dense is the default; BM25 remains as the free, download-free baseline used in CI.
 
 **Judge validation**, agreement with human gold (Cohen's kappa), on 47 conversations and 235 criterion cells:
 
 | Judge | Pooled kappa | Violation F1 (P/R) | Valid JSON | Notes |
 |---|---|---|---|---|
-| heuristic (floor) | **0.360** | 0.706 (0.75/0.67) | 1.00 | strong on mechanical criteria (tone κ 1.0, compliance 0.85, completeness 0.79); abstains on intent and policy accuracy |
-| LLM (Qwen2.5-3B) | 0.187 | 0.105 (0.06/0.56) | 0.64 | attempts all five, but over-flags (see below) |
+| heuristic (floor) | **0.276** | 0.261 (0.75/0.16) | 1.00 | precise but misses most violations; strong only on compliance (κ 0.73) and tone; abstains on intent and policy accuracy |
+| LLM (Qwen2.5-3B) | 0.232 | **0.355** (0.26/0.58) | 0.64 | attempts all five and catches most violations, but over-flags (see below) |
 
-The main result, and the reason the harness exists, is that the local 3B judge is miscalibrated and scores below the heuristic floor (κ 0.19 vs 0.36). Its systematic error is over-flagging: it marks compliant responses as violations on most criteria (human `pass`, judge `violation`: completeness 31 of 47, compliance 23, intent 21), so it catches real violations (recall 0.56) but buries them in false positives (precision 0.06). The heuristic is the opposite. It is reliable where it has explicit rules but abstains on the two criteria that need real reading, intent and policy accuracy, giving kappa 0 there. Neither is production-ready; the eval shows why, and points at the fix, a stronger or calibrated judge for the reading-heavy criteria. The numbers run against draft labels, so some over-flags may prove correct where the draft `pass` labels were lenient.
+Neither judge is production-ready, and they fail in opposite directions. The heuristic is precise (0.75) but catches only 6 of the 38 human-labelled violations: it has rules for credential requests and cold replies, but not for the failures that dominate the real data, such as stalls, generic "see the terms" pointers and invented policy. It also abstains on intent and policy accuracy, giving kappa 0 there. The 3B LLM judge catches 22 of 38 (recall 0.58), so it beats the heuristic on violation detection, but it raises 64 false alarms along the way; the dominant disagreement is human `pass` → judge `violation` (compliance 22 of 47, completeness 21, intent 15). The heuristic keeps a slight edge on pooled kappa (0.28 vs 0.23) because its agreement on the many `pass` cells is higher. The fix the eval points at is a calibrated or stronger judge on the reading-heavy criteria, with this harness as its acceptance test.
+
+Hand-reviewing the gold labels changed this conclusion. Against the original draft labels, which marked only 9 violations, the LLM looked clearly worse than the heuristic (κ 0.19 vs 0.36, F1 0.11 vs 0.71). Review found 38, and much of the LLM's apparent over-flagging turned out to be real violations the draft had marked `pass`.
 
 **Ablation**, retrieved top-k context vs whole-KB stuffing for the judge:
 
 | Context | Pooled kappa | Violation F1 (P/R) | Valid JSON | Mean prompt chars | Mean latency |
 |---|---|---|---|---|---|
-| **retrieved (top-5)** | **0.187** | 0.105 (0.06/0.56) | 0.64 | 5,143 | 24.2 s |
-| full (stuffed) | 0.134 | 0.127 (0.07/0.78) | 0.91 | 13,647 | 42.3 s |
+| **retrieved (top-5)** | **0.232** | 0.355 (0.26/0.58) | 0.64 | 5,143 | 24.2 s |
+| full (stuffed) | 0.212 | 0.417 (0.29/0.76) | 0.91 | 13,647 | 42.3 s |
 
-Retrieved (top-k) is the shipped configuration: agreement is as good or better than full-context stuffing at 62% smaller prompts and roughly half the latency. Full context is a genuine trade-off, with cleaner JSON (0.91 vs 0.64 valid) and higher violation recall (0.78) but lower precision and lower overall agreement at about 2.7x the prompt size. The balance shifts back toward retrieval as the knowledge base grows.
+Retrieved (top-k) is the shipped configuration: slightly higher agreement than full-context stuffing (κ 0.23 vs 0.21) at 62% smaller prompts and roughly half the latency. Full context is a genuine trade-off: it gives cleaner JSON (0.91 vs 0.64 valid) and better violation detection (F1 0.42 vs 0.36, recall 0.76), at about 2.7x the prompt size. If catching violations mattered more than cost, full context would be the better pick on a KB this small. The balance shifts back toward retrieval as the knowledge base grows.
 
 ## Requirements
 
@@ -131,7 +133,7 @@ deploy/huggingface-gradio/   free Gradio Space (live demo)
 
 ## Gold sets
 
-Two separate gold sets back the evaluation. `retrieval_gold.json` maps each conversation to the relevant policy passage ids, and `judge_gold.jsonl` holds a `pass`/`violation`/`na` verdict per criterion for each conversation. Both currently carry draft labels (`"reviewed": false`), so the judge and ablation numbers are provisional against those labels. The labelling protocol and the definitions of "relevant" and "violation" are documented in [`src/qaudit/eval/labels/LABELLING.md`](src/qaudit/eval/labels/LABELLING.md).
+Two separate gold sets back the evaluation. `retrieval_gold.json` maps each conversation to the relevant policy passage ids, and `judge_gold.jsonl` holds a `pass`/`violation`/`na` verdict per criterion for each conversation. Both were seeded with draft labels and then hand-reviewed row by row (`"reviewed": true`); each row's `note` records the reasoning behind borderline calls. Review raised the judge set from 9 to 38 violations and trimmed the retrieval set to only the passages an auditor would cite. One query (conv-0038, an account-tier upgrade) has no relevant passage because the KB has none, and is excluded from scoring. The labelling protocol, the definitions of "relevant" and "violation", and the decision rules used for borderline cases are documented in [`src/qaudit/eval/labels/LABELLING.md`](src/qaudit/eval/labels/LABELLING.md).
 
 ## Dataset and licence
 

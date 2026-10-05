@@ -110,7 +110,7 @@ def run(backends: list[str], context_mode: str = "retrieved") -> dict:
     results = [evaluate_backend(gold, b, context_mode) for b in backends]
     report = {
         "gold": "judge_gold.jsonl",
-        "labelling_status": "DRAFT human labels - review before citing final numbers.",
+        "labelling_status": "Hand-reviewed human labels (decision rules in labels/LABELLING.md).",
         "context_mode": context_mode,
         "results": results,
     }
@@ -120,7 +120,7 @@ def run(backends: list[str], context_mode: str = "retrieved") -> dict:
         "# Judge validation (agreement with human gold)",
         "",
         f"Gold: `judge_gold.jsonl` ({results[0]['n_labelled']} labelled conversations). "
-        "Labels are DRAFT - see the labelling note.",
+        "Labels hand-reviewed; decision rules in `labels/LABELLING.md`.",
         "",
         "| Backend | Context | Pooled kappa | Agreement | Violation F1 (P/R) | Valid JSON |",
         "|---|---|---|---|---|---|",
